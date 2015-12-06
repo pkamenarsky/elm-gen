@@ -1,4 +1,6 @@
-var components = { "mySlider" : "Slider" }
+#!/usr/bin/env node
+var fs = require("fs");
+var components = JSON.parse(fs.readFileSync("components.json", "utf8"));
 
 var capitalize = function(str) { return str.charAt(0).toUpperCase() + str.substr(1); }
 
