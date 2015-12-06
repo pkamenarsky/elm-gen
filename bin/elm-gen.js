@@ -45,7 +45,7 @@ console.log("init : (Model, Effects Action)");
 
 var x = components.map(function(c) { return "(" + c[0] + "Model, " + c[0] + "Fx) = " + c[1] + ".init"; });
 
-console.log("init = let " + x.join("\n                     ") + " in");
+console.log("init = let " + x.join("\n           ") + " in");
 
 var x = components.map(function(c) { return c[0] + " = " + c[0] + "Model"; });
 
