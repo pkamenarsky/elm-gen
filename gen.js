@@ -1,8 +1,19 @@
-var components = ["datepicker", "slider", "autocomplete"];
+var components = { "mySlider" : "Slider" }
 
 var capitalize = function(str) { return str.charAt(0).toUpperCase() + str.substr(1); }
 
-var x = components.map(function(c) { return "import " + capitalize(c); });
+Object.prototype.map = function(f) {
+  var r = [];
+  for (var key in this) {
+    if (this.hasOwnProperty(key)) {
+      r.push(f([key, this[key]]));
+    }
+  }
+
+  return r;
+}
+
+var x = components.map(function(c) { return "import " + c[1]; });
 
 console.log("module Components where");
 console.log("");
@@ -10,47 +21,49 @@ console.log(x.join("\n"));
 console.log("");
 console.log("import Effects as Fx exposing (Effects, Never)");
 console.log("");
-console.log("componentsMailbox : Signal.Mailbox ComponentActions");
-console.log("componentsMailbox = Signal.mailbox NoOpAction");
+console.log("mailbox : Signal.Mailbox Action");
+console.log("mailbox = Signal.mailbox NoOpAction");
 console.log();
-console.log("componentAddressFor = Signal.forwardTo componentsMailbox.address");
-
-var x = components.map(function(c) { return c + ": " + capitalize(c) + ".Model"; });
-
+console.log("addressFor = Signal.forwardTo mailbox.address");
 console.log();
-console.log("type alias Components = { " + x.join(", ") + " }");
+console.log("signal = mailbox.signal");
 
-var x = components.map(function(c) { return "Component" + capitalize(c) + "Action " + capitalize(c) + ".Action"; });
+var x = components.map(function(c) { return c[0] + " : " + c[1] + ".Model"; });
 
 console.log();
-console.log("type ComponentActions = NoOpAction | " + x.join(" | "));
+console.log("type alias Model = { " + x.join(", ") + " }");
+
+var x = components.map(function(c) { return "Component" + capitalize(c[0]) + "Action " + c[1] + ".Action"; });
 
 console.log();
-console.log("initComponents : (Components, Effects ComponentActions)");
+console.log("type Action = NoOpAction | " + x.join(" | "));
 
-var x = components.map(function(c) { return "(" + c + "Model, " + c + "Fx) = " + capitalize(c) + ".init"; });
+console.log();
+console.log("init : (Model, Effects Action)");
 
-console.log("initComponents = let " + x.join("\n                     ") + " in");
+var x = components.map(function(c) { return "(" + c[0] + "Model, " + c[0] + "Fx) = " + c[1] + ".init"; });
 
-var x = components.map(function(c) { return c + " = " + c + "Model"; });
+console.log("init = let " + x.join("\n                     ") + " in");
+
+var x = components.map(function(c) { return c[0] + " = " + c[0] + "Model"; });
 
 console.log("  (");
 console.log("    { " + x.join("\n    , "));
 console.log("    }");
 console.log("  , Fx.batch");
 
-var x = components.map(function(c) { return "Fx.map Component" + capitalize(c) + "Action " + c + "Fx"; });
+var x = components.map(function(c) { return "Fx.map Component" + capitalize(c[0]) + "Action " + c[0] + "Fx"; });
 console.log("      [ " + x.join("\n      , "));
 console.log("      ]");
 console.log("  )");
 
 console.log("");
-console.log("updateComponents : ComponentActions -> Components -> (Components, Effects ComponentActions");
-console.log("updateComponents action model = case action of");
+console.log("update : Action -> Model -> (Model, Effects Action)");
+console.log("update action model = case action of");
 
 var x = components.map(function(c)
- { return "  Component" + capitalize(c) + "Action a -> let (m, fx) = " + capitalize(c) + ".update a model." + c
-     + " in ({model | " + c + " = m}, Fx.map Component" + capitalize(c) + "Action fx)"
+ { return "  Component" + capitalize(c[0]) + "Action action -> let (m, fx) = " + c[1] + ".update action model." + c[0]
+     + " in ({model | " + c[0] + " = m}, Fx.map Component" + capitalize(c[0]) + "Action fx)"
  });
 console.log(x.join("\n"));
 console.log("  NoOpAction -> (model, Fx.none)");
