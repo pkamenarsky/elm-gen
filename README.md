@@ -2,6 +2,13 @@
 
 `elm-gen` generates the necessary but repetetive plumbing required when dealing with components in Elm.
 
+## Installation
+
+    git clone https://github.com/pkamenarsky/elm-gen
+    npm install (add -g for global installation)
+
+## Usage
+
 Given a `components.json` file like this:
 
     {
@@ -51,6 +58,8 @@ Given a `components.json` file like this:
       NoOpAction -> (model, Fx.none)
 
 The output can then be imported and used like usual (see `example` folder).
+
+## Notes
 
 Obviously this script has some raw edges (two `import Slider`s above), but it should convey the general idea.
 
