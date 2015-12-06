@@ -1,0 +1,12 @@
+{
+  "name": "elm-gen",
+  "version": "1.0.0",
+  "description": "Autogenerates Elm plumbing.",
+  "main": "gen.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philip Kamenarsky",
+  "dependencies": {
+  }
+}
